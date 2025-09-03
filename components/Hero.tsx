@@ -12,7 +12,7 @@ const Hero = () => {
     <div className="hero">
       <div className="flex-1 pt-36 padding-x">
           <h1 className="hero__title">
-            Find, book, rent a car-quck and super easy! 
+            Find, book, rent a car-quickly and super easily! 
           </h1>
 
           <p className="hero__subtitle">
@@ -25,6 +25,17 @@ const Hero = () => {
             handleClick={handleScroll}
           
           />
+        </div>
+        <div className="hero__image-container">
+          <div className="hero__image">
+            <Image src="/hero.png" alt="hero"
+            fill className="object-contain" />
+
+            <div className="hero__image-overlay"/>
+
+          </div>
+
+
         </div>
       </div>
   )
