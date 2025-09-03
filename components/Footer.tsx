@@ -37,7 +37,7 @@ const Footer = () => {
               ))}
             </div>
           ))}
-
+        </div>
         </div>
         <div className="flex justify-between
         items-center flex-wrap mt-10 border-t
@@ -58,7 +58,7 @@ const Footer = () => {
 
         </div>
 
-      </div>
+      
 
     </footer>
   )
