@@ -8,7 +8,7 @@ import { manufacturers } from "@/constants";
 import { SearchManufacturerProps } from "@/types";
 
 const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacturerProps) => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const filteredManufacturers =
     query === ""
@@ -38,7 +38,7 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
           {/* Input field for searching */}
           <Combobox.Input
             className="search-manufacturer__input"
-            displayValue={(item: string) => item}
+            displayValue={(manufacturer: string) => manufacturer}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Volkswagen..."
           />
@@ -49,20 +49,12 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            afterLeave={() => setQuery("")}
+            afterLeave={() => setQuery('')}
           >
             <Combobox.Options
               className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             >
-              {filteredManufacturers.length === 0 && query !== "" ? (
-                <Combobox.Option
-                  value={query}
-                  className="search-manufacturer__option"
-                >
-                  Create "{query}"
-                </Combobox.Option>
-              ) : (
-                filteredManufacturers.map((item) => (
+              {filteredManufacturers.map((item) => (
                   <Combobox.Option
                     key={item}
                     className={({ active }) =>
@@ -86,7 +78,7 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
                         {selected ? (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-white" : "text-primary-purple"
+                              active ? "text-white" : "text-teal-600"
                             }`}
                           ></span>
                         ) : null}
@@ -94,7 +86,7 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
                     )}
                   </Combobox.Option>
                 ))
-              )}
+              } 
             </Combobox.Options>
           </Transition>
         </div>
