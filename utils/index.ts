@@ -1,19 +1,19 @@
 import { CarProps, FilterProps } from "@/types";
 
 export async function fetchCars(filters: FilterProps) {
-    const { manufacturer, year, model, limit, fuel } = filters;
-    const headers = {
-        'x-rapidapi-key': '4ec9c6e9a1msh14ade4642bf4240p13ba29jsn63025478f307',
-		'x-rapidapi-host': 'cars-by-api-ninjas.p.rapidapi.com'
-    }
-    const response = await fetch(`https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&limit=${limit}&fuel_type=${fuel}`,
-     { headers: headers,
-    
-     });
+  const { manufacturer, year, model, fuel } = filters;
 
-    const result = await response.json();
+  // La MockAPI de obicei nu ai nevoie de headers speciali
+  const response = await fetch(
+    `https://68bae1ae84055bce63f077d3.mockapi.io/api/v1/CarProps`
+  );
 
-    return result;
+  if (!response.ok) {
+    throw new Error("Failed to fetch cars from MockAPI");
+  }
+
+  const result = await response.json();
+  return result as CarProps[];
 }
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
@@ -21,13 +21,10 @@ export const calculateCarRent = (city_mpg: number, year: number) => {
   const mileageFactor = 0.1; // Additional rate per mile driven
   const ageFactor = 0.05; // Additional rate per year of vehicle age
 
-  // Calculate additional rate based on mileage and age
   const mileageRate = city_mpg * mileageFactor;
   const ageRate = (new Date().getFullYear() - year) * ageFactor;
 
-  // Calculate total rental rate per day
   const rentalRatePerDay = basePricePerDay + mileageRate + ageRate;
-
   return rentalRatePerDay.toFixed(0);
 };
 
@@ -35,13 +32,28 @@ export const generateCarImageUrl = (car: CarProps, angle?: string) => {
   const url = new URL("https://cdn.imagin.studio/getimage");
   const { make, model, year } = car;
 
-  url.searchParams.append('customer', "img");
-  url.searchParams.append('make', make);
-  url.searchParams.append('modelFamily', model.split(" ")[0]);
-  url.searchParams.append('zoomType', 'fullscreen');
-  url.searchParams.append('modelYear', `${year}`);
-  // url.searchParams.append('zoomLevel', zoomLevel);
-  url.searchParams.append('angle', `${angle}`);
+  url.searchParams.append("customer", "img");
+  url.searchParams.append("make", make);
+  url.searchParams.append("modelFamily", model.split(" ")[0]);
+  url.searchParams.append("zoomType", "fullscreen");
+  url.searchParams.append("modelYear", `${year}`);
+  if (angle) {
+    url.searchParams.append("angle", angle);
+  }
 
-  return `${url}`;
-} 
+  return url.toString();
+};
+
+export const updateSearchParams = (type: string, value: string) => {
+  // Get the current URL search params
+  const searchParams = new URLSearchParams(window.location.search);
+
+  // Set the specified search parameter to the given value
+  searchParams.set(type, value);
+
+  // Set the specified search parameter to the given value
+  const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
+
+  return newPathname;
+};
+
