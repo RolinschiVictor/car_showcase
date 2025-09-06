@@ -1,9 +1,9 @@
 import { CarProps, FilterProps } from "@/types";
 
-export async function fetchCars(filters: FilterProps) {
+export async function fetchCars(filters: FilterProps): Promise<CarProps[]> {
   const { manufacturer, year, model, fuel } = filters;
 
-  // La MockAPI de obicei nu ai nevoie de headers speciali
+  // Fetch toate mașinile de la MockAPI
   const response = await fetch(
     `https://68bae1ae84055bce63f077d3.mockapi.io/api/v1/CarProps`
   );
@@ -12,9 +12,30 @@ export async function fetchCars(filters: FilterProps) {
     throw new Error("Failed to fetch cars from MockAPI");
   }
 
-  const result = await response.json();
-  return result as CarProps[];
+  const allCars: CarProps[] = await response.json();
+
+  // Filtrăm după parametrii selectați
+  const filteredCars = allCars.filter((car) => {
+    const matchesManufacturer = manufacturer
+      ? car.make.toLowerCase() === manufacturer.toLowerCase()
+      : true;
+
+    const matchesModel = model
+      ? car.model.toLowerCase().includes(model.toLowerCase())
+      : true;
+
+    const matchesYear = year ? car.year === Number(year) : true;
+
+    const matchesFuel = fuel
+      ? car.fuel_type.toLowerCase() === fuel.toLowerCase()
+      : true;
+
+    return matchesManufacturer && matchesModel && matchesYear && matchesFuel;
+  });
+
+  return filteredCars;
 }
+
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
   const basePricePerDay = 50; // Base rental price per day in dollars
